@@ -1,37 +1,37 @@
 <?php
-    ##abre uma variel sessão
+    #ABRE UMA VARIAVEL SESSÃO
     session_start();
-    $nomeusuario
-
-    #solicita o arquivo conectadb
+    #SOLICITA O ARQUIVO CONECTADB
     include("conectadb.php");
-
-    #eventp apos o click no botao logar
+    #EVENTO APÓS O CLICK NO BOTÃO LOGAR
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $nome = $_POST['nome'];
-        $senha = $_POST['senha']; 
+        $senha = $_POST['senha'];
 
-        #query de banco de dados 
-        $sql = "SELECT COUNT(usu_id) FROM usuarios WHERE usu_nome = '$nome' AND usu_senha = '$senha'";
+        
+        #QUERY DE BANCO DE DADOS
+        $sql = "SELECT COUNT(usu_id) FROM usuarios WHERE usu_nome = '$nome' AND usu_senha = '$senha' AND usu_ativo = 's'";
         $retorno = mysqli_query($link, $sql);
 
-        ## todo retorno do banco e retornado em array em php
-        while($tbl = mysqli_fetch_array($retorno))
-        {
+        #TODO RETORNO DO BANCO É RETORNADO EM ARRAY EM PHP
+        while($tbl = mysqli_fetch_array($retorno)){
             $cont = $tbl[0];
         }
-
-        ##verifica se usuario existe
-        #se $cont ==1 ele existe e faz login
-        #se $cont ==0 ele nao existe e usuario nao esta cadastrado
+        
+        #VERIFICA SE USUARIO EXISTE
+        #SE $CONT == 1 ELE EXISTE E FAZ LOGIN
+        #SE $CONT == 0 ELE NÃO EXISTE E USUARIO NÃO ESTÁ CADASTRADO
         if($cont == 1){
-            $sql = "SELECT * FROM usuarios  WHERE usu_nome = $nome' AND usu_senha = '$senha' AND usu_ativo = 's'";
+            $sql = "SELECT * FROM usuarios WHERE usu_nome = '$nome' 
+            AND usu_senha = '$senha' AND usu_ativo = 's'";
+            $_SESSION['nomeusuario'] = $nome;
+            
+            #DIRECIONA USUARIO PARA O ADM
             echo"<script>window.location.href='admhome.php';</script>";
         }
         else{
             echo"<script>window.alert('USUARIO OU SENHA INCORRETO');</script>";
         }
-
     }
 ?>
 <!DOCTYPE html>
@@ -43,19 +43,14 @@
     <title>LOGIN USUARIO</title>
 </head>
 <body>
-    <form action ="login.php" method="post">
+    <form action="login.php" method="post">
         <h1>LOGIN DE USUARIO</h1>
-        <input type="text" name= "nome" placeholder="NOME" required>
+        <input type="text" name="nome" placeholder="NOME" required>
         <p></p>
-        <input type="password" name= "senha" placeholder="SENHA" required>
+        <input type="password" name="senha" placeholder="SENHA" required>
         <p></p>
-        <input type="submit" name= "login" value="LOGIN">
-
+        <input type="submit" name="login" value="LOGIN">
     </form>
-
-
-        
-    
     
 </body>
 </html>
